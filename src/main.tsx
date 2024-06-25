@@ -15,7 +15,7 @@ const TodoItemContainer = styled.div`
   border: 1px solid grey;
   margin-bottom: 5px;
   background-color: lightblue;
-  padding: .5rem .5rem;
+  padding: 0.5rem 0.5rem;
 `;
 const TodoContent = styled.div``;
 
@@ -40,13 +40,13 @@ const InputContainer = styled.div`
 `;
 
 const TodoInput = styled.input`
-  padding:10px 10px;
+  padding: 10px 10px;
   width: 100%;
 `;
 
 const AddTodoButton = styled.button`
-  padding:10px 12px;
-  margin:0 0 0 .2rem;
+  padding: 10px 12px;
+  margin: 0 0 0 0.2rem;
   width: 200px;
   background-color: lightgreen;
   border: none;
@@ -64,9 +64,19 @@ interface TodoListProps {
   onEditTodo: (id: string, newContent: string) => void;
 }
 
-const Todo = ({ todo, index, onDelete, onEdit }: { todo: Todo; index: number; onDelete: (id: string) => void; onEdit: (id: string, newContent: string) => void; }) => {
+const Todo = ({
+  todo,
+  index,
+  onDelete,
+  onEdit,
+}: {
+  todo: Todo;
+  index: number;
+  onDelete: (id: string) => void;
+  onEdit: (id: string, newContent: string) => void;
+}) => {
   const [showModal, setShowModal] = useState(false);
-  const [editedContent, setEditedContent] = useState(todo.content);
+  const [editedContent, setEditedContent] = useState("todo.content");
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -79,7 +89,11 @@ const Todo = ({ todo, index, onDelete, onEdit }: { todo: Todo; index: number; on
     <>
       <Draggable draggableId={todo.id} index={index}>
         {(provided) => (
-          <TodoItemContainer ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+          <TodoItemContainer
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
             <TodoContent>{todo.content}</TodoContent>
             <div>
               <TodoButton onClick={handleShowModal}>
@@ -116,13 +130,21 @@ const Todo = ({ todo, index, onDelete, onEdit }: { todo: Todo; index: number; on
   );
 };
 
-const TodoList = React.memo(({ todos, onDeleteTodo, onEditTodo }: TodoListProps) => (
-  <>
-    {todos.map((todo, index) => (
-      <Todo key={todo.id} todo={todo} index={index} onDelete={onDeleteTodo} onEdit={onEditTodo} />
-    ))}
-  </>
-));
+const TodoList = React.memo(
+  ({ todos, onDeleteTodo, onEditTodo }: TodoListProps) => (
+    <>
+      {todos.map((todo, index) => (
+        <Todo
+          key={todo.id}
+          todo={todo}
+          index={index}
+          onDelete={onDeleteTodo}
+          onEdit={onEditTodo}
+        />
+      ))}
+    </>
+  )
+);
 
 function TodoApp() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -136,7 +158,7 @@ function TodoApp() {
     if (inputValue.trim() !== "") {
       const newTodo: Todo = {
         id: `todo-${Date.now()}`,
-        content: inputValue.trim()
+        content: inputValue.trim(),
       };
 
       setTodos((prevTodos) => [...prevTodos, newTodo]);
@@ -197,7 +219,11 @@ function TodoApp() {
           <Droppable droppableId="todo-list">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
-                <TodoList todos={todos} onDeleteTodo={handleDeleteTodo} onEditTodo={handleEditTodo} />
+                <TodoList
+                  todos={todos}
+                  onDeleteTodo={handleDeleteTodo}
+                  onEditTodo={handleEditTodo}
+                />
                 {provided.placeholder}
               </div>
             )}
